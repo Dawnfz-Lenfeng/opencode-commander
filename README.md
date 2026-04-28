@@ -17,7 +17,7 @@ Debate decisions. Audit code. Simplify complexity. One slash, zero setup.
 Paste this into your opencode session:
 
 ```
-Install opencode-commander by following the instructions at https://raw.githubusercontent.com/Dawnfz-Lenfeng/opencode-commander/main/commands/install.md
+Install opencode-commander by following the instructions at https://raw.githubusercontent.com/Dawnfz-Lenfeng/opencode-commander/main/docs/install.md
 ```
 
 Your agent will download and install all commands automatically.

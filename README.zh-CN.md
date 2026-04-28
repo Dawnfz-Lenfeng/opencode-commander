@@ -17,7 +17,7 @@
 把这段话粘贴到你的 opencode 对话中：
 
 ```
-按照 https://raw.githubusercontent.com/Dawnfz-Lenfeng/opencode-commander/main/commands/install.md 的说明安装 opencode-commander
+按照 https://raw.githubusercontent.com/Dawnfz-Lenfeng/opencode-commander/main/docs/install.md 的说明安装 opencode-commander
 ```
 
 你的 agent 会自动下载并安装所有命令。
