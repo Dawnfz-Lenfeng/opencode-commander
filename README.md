@@ -1,33 +1,33 @@
-# opencode-spells
+# opencode-commander
 
-A spellbook for [opencode](https://opencode.ai) — custom commands that give your agents superpowers.
+Supercharge [opencode](https://opencode.ai) with commands that do the work your default agent can't.
 
-Each spell is a `.md` file that drops into your commands directory. No config, no dependencies, no setup. Just copy and cast.
+Debate decisions. Audit code. Simplify complexity. One slash, zero setup.
 
 ## Install
 
 ```bash
-# Cast spells globally (all projects)
+# Global (all projects)
 cp commands/*.md ~/.config/opencode/commands/
 
-# Or cast spells per-project
+# Per-project
 cp commands/*.md .opencode/commands/
 ```
 
-Pick one spell or take them all. They work independently.
+Pick one or take them all. Each command works independently.
 
-## Spells
+## Commands
 
 ### 🔥 `/debate` — Adversarial Debate
 
 Two agents fight from opposite sides to stress-test an idea, then distill genuine insights from the conflict.
 
-The debate protocol is designed to avoid the two most common failure modes of LLM debate:
+What makes this different from asking an LLM to "list pros and cons":
 
-- **Ratchet effect** — the Proponent never concedes. "No rebuttal" is a capability statement, not an admission. No single-sided retreat.
-- **Toothless criticism** — the Critic must withdraw successfully-rebutted attacks or escalate once. No ignoring, no reusing dead arguments.
-
-Every attack point follows a strict lifecycle with a clear terminal state. Conflict is preserved, not smoothed over.
+- **No ratchet effect** — the Proponent never concedes. "No rebuttal" is a capability statement, not an admission. No single-sided retreat.
+- **No toothless criticism** — the Critic must withdraw successfully-rebutted attacks or escalate once. No ignoring, no reusing dead arguments.
+- **Attack-point lifecycle** — every attack follows a strict protocol with a clear terminal state (withdrawn / survived / escalated). Conflict is preserved, not smoothed over.
+- **Distillation, not synthesis** — the output isn't a merged compromise. It's a list of insights that only conflict could produce.
 
 ```bash
 /debate should we migrate from REST to gRPC
@@ -39,7 +39,7 @@ Every attack point follows a strict lifecycle with a clear terminal state. Confl
 
 A sub-agent systematically audits design documents or code with full context injection.
 
-Auto-detects input type and applies the right dimensions — design docs get soundness/completeness/feasibility/risks; code gets correctness/error handling/security/maintainability/performance. Zero-finding audit is a valid result — no manufactured issues.
+Auto-detects input type and applies the right audit dimensions — design docs get soundness, completeness, feasibility, risks; code gets correctness, error handling, security, maintainability, performance. Zero-finding audit is a valid result — no manufactured issues.
 
 ```bash
 /audit src/tools.py
@@ -51,7 +51,7 @@ Auto-detects input type and applies the right dimensions — design docs get sou
 
 Simplify recently changed or specified code while preserving exact behavior.
 
-No target = auto-scope to `git diff HEAD`. Specify a file to scope manually. Follows your project's `AGENTS.md` conventions. If the code is already simple, it says so.
+No target specified? Auto-scopes to `git diff HEAD`. Point it at a file? Only that file. Already simple? It says so — no forced changes.
 
 ```bash
 /simplify                      # simplify recent changes
@@ -61,7 +61,7 @@ No target = auto-scope to `git diff HEAD`. Specify a file to scope manually. Fol
 
 ## When to use what
 
-| You want to... | Cast |
+| You want to... | Command |
 |---|---|
 | Make a decision you're uncertain about | `/debate` |
 | Find problems you might have missed | `/audit` |
@@ -69,13 +69,17 @@ No target = auto-scope to `git diff HEAD`. Specify a file to scope manually. Fol
 
 Debate finds what you didn't think of. Audit finds what you missed. Simplify removes what you don't need.
 
-## Contribute a spell
+## Contribute
 
-Got a command that makes opencode better? PR it into `commands/` with a `.md` file following the [opencode command format](https://opencode.ai/docs/commands). Include:
+Got a command that makes opencode better? PR it into `commands/` with a `.md` file following the [opencode command format](https://opencode.ai/docs/commands).
 
-- `description` in frontmatter (what it does, shown in `/` menu)
+Required:
+- `description` in frontmatter — what it does, shown in the `/` menu
+- Clear instructions in the body — this is the prompt the agent receives
+
+Optional:
 - `argument-hint` if it takes arguments
-- Clear instructions in the body (this is the prompt the agent receives)
+- `agent` if it should run on a specific agent
 
 ## License
 
