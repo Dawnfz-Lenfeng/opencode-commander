@@ -1,3 +1,5 @@
+# Install
+
 Install opencode-commander by downloading the command files from GitHub.
 
 ## STEPS
@@ -8,9 +10,9 @@ Install opencode-commander by downloading the command files from GitHub.
 
 2. Download each command file using curl:
    ```bash
-   curl -fsSL https://raw.githubusercontent.com/Dawnfz-Lenfeng/opencode-commander/main/commands/debate.md -o <commands-dir>/debate.md
-   curl -fsSL https://raw.githubusercontent.com/Dawnfz-Lenfeng/opencode-commander/main/commands/audit.md -o <commands-dir>/audit.md
-   curl -fsSL https://raw.githubusercontent.com/Dawnfz-Lenfeng/opencode-commander/main/commands/simplify.md -o <commands-dir>/simplify.md
+   curl -fsSL https://raw.githubusercontent.com/Dawnfz-Lenfeng/opencode-commander/master/commands/debate.md -o <commands-dir>/debate.md
+   curl -fsSL https://raw.githubusercontent.com/Dawnfz-Lenfeng/opencode-commander/master/commands/audit.md -o <commands-dir>/audit.md
+   curl -fsSL https://raw.githubusercontent.com/Dawnfz-Lenfeng/opencode-commander/master/commands/simplify.md -o <commands-dir>/simplify.md
    ```
 
 3. Verify each file was downloaded successfully (check file exists and is non-empty).
