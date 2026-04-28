@@ -1,8 +1,3 @@
----
-description: Install opencode-commander commands
-agent: build
----
-
 Install opencode-commander by downloading the command files from GitHub.
 
 ## STEPS
