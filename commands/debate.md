@@ -1,6 +1,6 @@
 ---
 description: Adversarial debate - distill insights from conflict, discard the noise
-argument-hint: "your idea, plan, or question [--rounds=N] [--converge]"
+argument-hint: "your idea, plan, or question [--rounds=N]"
 agent: plan
 ---
 
@@ -14,8 +14,7 @@ The user's input: $ARGUMENTS
 
 Extract from the user's input:
 - **Topic**: the core idea/plan/question (everything that is not a flag)
-- **Rounds**: `--rounds=N` (default: 2). `--rounds=1` produces independent opposing views without interaction.
-- **Converge**: `--converge`. Stop early when both sides agree on key points for 2 consecutive rounds. Maximum rounds still respected as hard cap.
+- **Rounds**: `--rounds=N` (default: 2, minimum: 2).
 
 ## DELEGATION
 
@@ -35,7 +34,7 @@ Round 3+: Proponent responds to escalation/new attacks → Critic continues
 
 Terminal states:
   Critic withdraws                 → No insight (Proponent defended successfully)
-  Proponent refutes twice          → No insight (Proponent defended successfully)
+  Proponent refutes twice          → CONTESTED (escalation cap reached, defense may be procedural)
   Proponent states "No rebuttal"   → INSIGHT (genuine inability to defend)
 ```
 
@@ -51,8 +50,7 @@ Terminal states:
 ### Round 1
 
 **Step 1 — Proponent** (`task(subagent_type="general")`):
-- You are the PROONENT. Create the strongest possible plan/analysis from scratch.
-- OUTPUT: your proposal.
+- You are the PROPONENT. Create the strongest possible plan/analysis from scratch.
 
 **Step 2 — Critic** (`task(subagent_type="general")`), receives Proponent's output:
 - You are the CRITIC. ATTACK. Be harsh, not polite. "You might want to add error handling" = weak. "This approach silently drops data under concurrent writes" = strong.
@@ -72,30 +70,21 @@ Terminal states:
 - For EACH previous attack point:
   - Proponent stated `No rebuttal` → mark as `Surviving #[X]`. Closed — move on.
   - Proponent `Refuted` → choose one of:
-    - `Withdrawn #[X]: Proponent rebutted because [acknowledge specific rebuttal]` — when rebuttal is logically sound. Withdrawn points may NOT be reused.
-    - `Escalated #[X]: Proponent's rebuttal fails because [specific flaw], strengthened evidence: [new support]` — when rebuttal has a logical gap. Must address the rebuttal, not repeat the original attack.
-- After processing previous attacks, raise NEW attacks with numbered points. Never repeat the same argument unchanged.
+    - `Withdrawn #[X]: Proponent rebutted because [acknowledge specific rebuttal]` — when rebuttal is logically sound.
+    - `Escalated #[X]: Proponent's rebuttal fails because [specific flaw], strengthened evidence: [new support]` — when rebuttal has a logical gap. Must address the rebuttal, not repeat the original attack or argument unchanged.
+- After processing previous attacks, raise NEW attacks with numbered points.
 - OUTPUT: status of each previous point (surviving/withdrawn/escalated) + new attacks.
-
-### Convergence (only if `--converge` is set)
-
-After both agents complete a round, compare with previous round:
-- Has the Critic stopped raising fundamentally new objections?
-- Are there few or no surviving unrefuted attacks?
-- Is the Proponent's plan no longer changing significantly?
-
-If converged for 2 consecutive rounds → skip remaining rounds, proceed to Distillation.
 
 ### Final Phase — Distillation
 
-Discard rhetoric, defensiveness, and compromise. Keep only insights that required conflict to surface.
+Discard rhetoric, defensiveness, and compromise.
 
 **Process:**
 
 1. **Collect all surviving attack points** — attacks where the Proponent stated "No rebuttal".
 2. **Identify forced adaptations** — parts of the Proponent's plan that changed between rounds in direct response to specific attacks, even though the Proponent never conceded.
 3. **Identify inversions** — cases where the Critic proved the opposite of the original assumption is true ("not only is X unnecessary, it's actively harmful").
-4. **Discard everything else**: withdrawn attacks, escalated-but-twice-rebutted points, and restatements of what a single agent would have said without debate.
+4. **Discard everything else**: withdrawn attacks and restatements of what a single agent would have said without debate. Contested points (escalation cap reached) are listed separately — worth investigating but did not survive direct challenge.
 
 ## OUTPUT FORMAT
 
@@ -108,9 +97,10 @@ Discard rhetoric, defensiveness, and compromise. Keep only insights that require
 **Implication**: [what the user should do differently]
 
 ### Forced adaptations (if any)
+### Contested (if any)
 ### Inversion (if any)
 ### Verdict
 [One paragraph: what to do, based ONLY on distilled insights]
 ```
 
-Each insight MUST explain why debate was required to surface it. If nothing surprising emerged, say so. If the entire idea is fundamentally flawed, say so — do not produce a refined version of a broken idea. Never produce compromise conclusions.
+Each insight MUST explain why debate was required to surface it. If nothing surprising emerged, say so. If the entire idea is fundamentally flawed, say so. Never produce compromise conclusions.
