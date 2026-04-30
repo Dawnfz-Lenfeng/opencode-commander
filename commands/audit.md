@@ -1,5 +1,5 @@
 ---
-description: Audit design docs or code — objective findings via sub-agent with context injection
+description: Audit design docs or code — objective findings via sub-agent
 argument-hint: "file path or description to audit"
 agent: plan
 ---
@@ -10,25 +10,14 @@ You are running an **Audit**. A sub-agent will perform the audit with full conte
 
 $ARGUMENTS
 
-## CONTEXT INJECTION (MANDATORY BEFORE DELEGATION)
-
-The audit sub-agent has an independent context window — it cannot see what you have already read. Before delegating, you MUST:
-
-1. **Pre-read the target files** specified in the arguments. If the argument is a file path, read it. If it's a description, search for and read the relevant files.
-2. **Bundle ALL relevant content into the sub-agent prompt** — include file contents, code snippets, or documentation excerpts. Do NOT assume the sub-agent will find them on its own.
-3. **Specify exact file paths** alongside the content, so the sub-agent knows what it's looking at.
-
-This avoids the sub-agent redundantly re-exploring the codebase from scratch.
-
 ## DELEGATION
 
-After gathering context, delegate the audit to a sub-agent:
+The sub-agent has an independent context window — it cannot see what you have already read. Before delegating:
 
-`task(subagent_type="general", run_in_background=true, description="Audit: [target]", prompt="[ALL CONTEXT + AUDIT INSTRUCTIONS BELOW]")`
+1. Read the target files specified in `$ARGUMENTS`. If it's a file path, read it. If it's a description, search for and read relevant files.
+2. Delegate to a sub-agent, bundling all pre-read content (with file paths) into the prompt:
 
-The prompt to the sub-agent must include:
-- The pre-read file contents and context
-- The audit instructions below
+`task(subagent_type="general", description="Audit: [target]", prompt="[ALL PRE-READ CONTENT WITH FILE PATHS + AUDIT INSTRUCTIONS BELOW]")`
 
 ## AUDIT INSTRUCTIONS (include in sub-agent prompt)
 
@@ -53,28 +42,8 @@ Determine what you're auditing: a design document, code, or a concept descriptio
 For each finding, rate severity: **CRITICAL** / **HIGH** / **MEDIUM** / **LOW**
 Only report genuine problems. Do not pad the list. Do not flag style preferences as findings.
 
-Output format:
-```
-## Audit: [what was audited]
-
-### CRITICAL
-- [finding]
-
-### HIGH
-- [finding]
-
-### MEDIUM
-- [finding]
-
-### LOW
-- [finding]
-
-### Summary
-[1-2 sentences: overall assessment and the most important thing to fix]
-```
-
-If no findings in a severity level, omit that section. An audit with zero findings is valid — do not manufacture issues.
+Output as: `## Audit: [what]` → severity sections (`### CRITICAL` / `### HIGH` / `### MEDIUM` / `### LOW`) with `- [finding]` bullets → `### Summary` with 1-2 sentence overall assessment. Omit empty severity levels. Zero findings is valid — do not manufacture issues.
 
 ## AFTER RECEIVING RESULTS
 
-When the sub-agent completes, report the results to the user directly. Do not reinterpret or soften the findings.
+Report the sub-agent's results to the user directly, unmodified.

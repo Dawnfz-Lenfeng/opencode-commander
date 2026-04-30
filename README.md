@@ -29,7 +29,15 @@ Paste this into your opencode session:
 Install opencode-commander by following the instructions at https://raw.githubusercontent.com/Dawnfz-Lenfeng/opencode-commander/master/docs/install.md
 ```
 
-Your agent will download and install all commands automatically.
+Your agent will clone the repo and symlink commands automatically.
+
+## Update
+
+```bash
+cd ~/.opencode-commander && git pull
+```
+
+Symlinks update automatically.
 
 ## Commands
 
